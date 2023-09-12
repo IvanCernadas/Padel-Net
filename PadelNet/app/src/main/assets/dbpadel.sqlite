@@ -1,0 +1,47 @@
+BEGIN TRANSACTION;
+CREATE TABLE IF NOT EXISTS "Competicion" (
+	"nombre"	TEXT,
+	"foto"	TEXT NOT NULL,
+	"nombre_admin"	TEXT,
+	PRIMARY KEY("nombre")
+	FOREIGN KEY("nombre_admin") REFERENCES "Admin"("nombre")
+);
+CREATE TABLE IF NOT EXISTS "Admin" (
+	"nombre"	TEXT,
+	"pass"	TEXT NOT NULL,
+	PRIMARY KEY("nombre")
+);
+CREATE TABLE IF NOT EXISTS "Pista" (
+	"id"	INTEGER PRIMARY KEY AUTOINCREMENT,
+	"foto"	TEXT NOT NULL,
+	"nombre_admin"	TEXT,
+	PRIMARY KEY("id")
+	FOREIGN KEY("nombre_admin") REFERENCES "Admin"("nombre")
+);
+CREATE TABLE IF NOT EXISTS "Inscribir_competicion" (
+	"user_nombre"	TEXT,
+	"competi_nombre"	TEXT,
+	"fecha"	TEXT NOT NULL,
+	PRIMARY KEY("user_nombre","competi_nombre"),
+	FOREIGN KEY("user_nombre") REFERENCES "Usuario"("nombre")
+	FOREIGN KEY("competi_nombre") REFERENCES "Competicion"("nombre")
+);
+CREATE TABLE IF NOT EXISTS "Reserva_Pista" (
+	"user_nombre"	TEXT,
+	"id_pista"	INTEGER,
+	"fecha"	TEXT NOT NULL,
+	"hora" TEXT NOT NULL,
+	PRIMARY KEY("user_nombre","id_pista"),
+	FOREIGN KEY("id_pista") REFERENCES "Pista"("id"),
+	FOREIGN KEY("user_nombre") REFERENCES "Usuario"("nombre")
+);
+CREATE TABLE IF NOT EXISTS "Usuario" (
+	"nombre"	TEXT,
+	"email"	TEXT NOT NULL UNIQUE,
+	"pass"	TEXT NOT NULL,
+	PRIMARY KEY("nombre")
+);
+INSERT INTO "Admin" VALUES ('root','toor');
+INSERT INTO "Usuario" VALUES ('Ivan', 'ivancerfra@gmail.com', '1234')
+INSERT INTO "Reserva_Pista" VALUES ('Ivan', '1', '10-05-2023', '17:00 - 18:00')
+COMMIT;
